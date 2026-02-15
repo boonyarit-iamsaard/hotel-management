@@ -2,13 +2,17 @@
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
+import type { ReactNode } from "react";
 import { queryClient } from "@/utils/trpc";
-
 import { ThemeProvider } from "./theme-provider";
 import { Toaster } from "./ui/sonner";
+import { TooltipProvider } from "./ui/tooltip";
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+interface ProvidersProps {
+  children: ReactNode;
+}
+
+export default function Providers({ children }: Readonly<ProvidersProps>) {
   return (
     <ThemeProvider
       attribute="class"
@@ -17,7 +21,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <QueryClientProvider client={queryClient}>
-        {children}
+        <TooltipProvider>{children}</TooltipProvider>
         <ReactQueryDevtools />
       </QueryClientProvider>
       <Toaster richColors />
