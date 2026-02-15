@@ -31,10 +31,6 @@
     "db:studio": "turbo -F @hotel-management/db db:studio",
     "db:generate": "turbo -F @hotel-management/db db:generate",
     "db:migrate": "turbo -F @hotel-management/db db:migrate",
-    "db:start": "turbo -F @hotel-management/db db:start",
-    "db:watch": "turbo -F @hotel-management/db db:watch",
-    "db:stop": "turbo -F @hotel-management/db db:stop",
-    "db:down": "turbo -F @hotel-management/db db:down",
     "check": "biome check --write .",
     "prepare": "husky"
   },

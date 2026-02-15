@@ -1,0 +1,28 @@
+name: "hotel-management"
+
+services:
+  postgres:
+    container_name: "hotel-management-postgres"
+    image: "docker.io/postgres:15-alpine"
+    env_file:
+      - .env.local
+    ports:
+      - "5432:5432"
+    restart: "always"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - hotel-management-network
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER:-postgres} -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
+    name: "hotel-management-pgdata"
+
+networks:
+  hotel-management-network:
+    name: "hotel-management-network"
