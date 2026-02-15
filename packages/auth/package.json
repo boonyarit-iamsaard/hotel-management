@@ -1,0 +1,24 @@
+{
+  "name": "@hotel-management/auth",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {},
+  "dependencies": {
+    "@hotel-management/db": "workspace:*",
+    "@hotel-management/env": "workspace:*",
+    "better-auth": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@hotel-management/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}

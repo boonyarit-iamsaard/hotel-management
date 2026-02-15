@@ -1,0 +1,3 @@
+{
+  "extends": "@hotel-management/config/tsconfig.base.json"
+}
