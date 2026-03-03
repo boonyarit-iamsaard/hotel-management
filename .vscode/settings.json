@@ -1,0 +1,10 @@
+{
+  "css.lint.unknownAtRules": "ignore",
+  "[csharp][xml]": {
+    "editor.defaultFormatter": "csharpier.csharpier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.csharpier": "explicit"
+    }
+  },
+  "sonarlint.analysisExcludesStandalone": "**/src/types/api.ts"
+}
