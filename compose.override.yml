@@ -1,0 +1,92 @@
+services:
+  app:
+    container_name: hotel-management-app
+    build:
+      context: .
+      target: app
+    restart: unless-stopped
+    environment: &app-environment
+      APP_NAME: ${APP_NAME:-Hotel Management}
+      APP_ENV: production
+      APP_KEY: ${APP_KEY}
+      APP_DEBUG: 'false'
+      APP_URL: ${DOCKER_APP_URL:-http://localhost:8080}
+      LOG_CHANNEL: stderr
+      LOG_LEVEL: ${DOCKER_LOG_LEVEL:-info}
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: ${DB_DATABASE:-hotel-management}
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      CACHE_STORE: database
+      SESSION_DRIVER: database
+      SESSION_SECURE_COOKIE: ${SESSION_SECURE_COOKIE:-false}
+      QUEUE_CONNECTION: database
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS:-contact@hotel-management.com}
+      MAIL_FROM_NAME: ${MAIL_FROM_NAME:-Hotel Management}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+    volumes:
+      - app-storage:/var/www/html/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - hotel-management-network
+
+  queue:
+    container_name: hotel-management-queue
+    build:
+      context: .
+      target: app
+    restart: unless-stopped
+    command: php artisan queue:work --sleep=3 --tries=3 --timeout=90
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: 'false'
+    volumes:
+      - app-storage:/var/www/html/storage
+    depends_on:
+      app:
+        condition: service_started
+    networks:
+      - hotel-management-network
+
+  scheduler:
+    container_name: hotel-management-scheduler
+    build:
+      context: .
+      target: app
+    restart: unless-stopped
+    command: php artisan schedule:work
+    environment:
+      <<: *app-environment
+      RUN_MIGRATIONS: 'false'
+    volumes:
+      - app-storage:/var/www/html/storage
+    depends_on:
+      app:
+        condition: service_started
+    networks:
+      - hotel-management-network
+
+  nginx:
+    container_name: hotel-management-nginx
+    build:
+      context: .
+      target: web
+    restart: unless-stopped
+    ports:
+      - '${APP_PORT:-8080}:80'
+    depends_on:
+      app:
+        condition: service_started
+    networks:
+      - hotel-management-network
+
+volumes:
+  app-storage:
+    name: hotel-management-app-storage
