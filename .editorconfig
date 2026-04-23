@@ -8,11 +8,8 @@ indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
 
-[*.md]
-trim_trailing_whitespace = false
-
-[*.{yml,yaml}]
+[*.{js,jsx,ts,tsx,cjs,mjs,yml,yaml,json,css,md}]
 indent_size = 2
 
-[compose.yaml]
+[{composer.json,boost.json,pint.json}]
 indent_size = 4
